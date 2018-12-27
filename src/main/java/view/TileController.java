@@ -27,7 +27,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 
-public class TextAreaController
+public class TileController
 {
 	ObservableList<String> list = FXCollections.observableArrayList();
 	File initialDirectory = null;
@@ -97,7 +97,7 @@ public class TextAreaController
 	private ResourceBundle resources;
 	
 	// Add a public no-args constructor
-	public TextAreaController() 
+	public TileController() 
 	{
 	}
 
@@ -243,7 +243,6 @@ public class TextAreaController
 					}
 					writer.close();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -300,7 +299,6 @@ public class TextAreaController
 					}
 					writer.close();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -345,7 +343,6 @@ public class TextAreaController
 
 					drawGrid(pane);
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
