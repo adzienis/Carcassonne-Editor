@@ -29,30 +29,7 @@ import javafx.stage.FileChooser;
 
 public class TileController
 {
-	ObservableList<String> list = FXCollections.observableArrayList();
-	File initialDirectory = null;
-
-	FileChooser fileChooser = new FileChooser();
-
-	int count = 0;
-
-	@FXML
-	private TextField countField;
-
-	@FXML
-	private MenuItem open, save, newItem, saveas;
-
-	@FXML
-	private ImageView imageView;
-
-	@FXML
-	private Label countLabel;
-
-	File file = null;
-
-	int[][] grid = new int[9][9];
-
-	enum TileType { 
+	private enum TileType { 
 		Field, Road, City, Cloister, None, Crossing;
 
 		public static int getTileValue(TileType t) {
@@ -74,6 +51,28 @@ public class TileController
 			}
 		}
 	 }
+
+	private ObservableList<String> list = FXCollections.observableArrayList();
+
+	private FileChooser fileChooser = new FileChooser();
+
+	private int count = 0;
+
+	@FXML
+	private TextField countField;
+
+	@FXML
+	private MenuItem open, save, newItem, saveas;
+
+	@FXML
+	private ImageView imageView;
+
+	@FXML
+	private Label countLabel;
+
+	File file = null;
+
+	int[][] grid = new int[9][9];
 
 	@FXML
 	private Pane pane;
@@ -99,6 +98,33 @@ public class TileController
 	// Add a public no-args constructor
 	public TileController() 
 	{
+	}
+
+	@FXML
+	private void initialize() 
+	{
+		for(int row = 0; row < 9; row++) {
+			for(int col = 0; col < 9; col++) {
+				grid[row][col] = -1;
+			}
+		}
+
+		initializeEventHandlers();
+
+		drawGrid(pane);
+
+		loadData();
+	}
+	
+	@FXML
+	private void printOutput() 
+	{
+		outputText.setText(inputText.getText());
+	}
+
+	@FXML
+	private void TextChanged() {
+		System.out.println("asd");
 	}
 
 	@FXML
@@ -211,17 +237,7 @@ public class TileController
 		pane.getChildren().addAll(right, bottom);
 	}
 
-	@FXML
-	private void initialize() 
-	{
-		for(int row = 0; row < 9; row++) {
-			for(int col = 0; col < 9; col++) {
-				grid[row][col] = -1;
-			}
-		}
-
-		drawGrid(pane);
-
+	private void initializeEventHandlers() {
 		saveas.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -248,118 +264,105 @@ public class TileController
 			}
 			});
 
-		newItem.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				try {
-					file = null;
-
-					for(int row = 0; row < 9; row++) {
-						for(int col = 0; col < 9; col++) {
-							grid[row][col] = -1;
-						}
-					}
-
-					count = 0;
-					drawGrid(pane);
-				}
-				catch(Exception err) {
-					return;
-				}
-			}
-		});
-
-		countField.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				try {
-					count = Integer.parseInt(countField.getText());
-					countLabel.setText("Count: " + Integer.toString(count));
-					countField.clear();
-				}
-				catch(Exception err) {
-					return;
-				}
-			}
-		});
-
-		save.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				try {
-					FileWriter writer = new FileWriter(file);
-
-					writer.write(Integer.toString(count) + "\n");
-
-					for(int row = 0; row < 9; row++) {
-						for(int col = 0; col < 9; col++) {
-							writer.write(Integer.toString(grid[row][col]) + " ");
-						}
-						writer.write("\n");
-					}
-					writer.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-
-		open.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				if(file != null) {
-					fileChooser.setInitialDirectory(file.getParentFile());
-				}
-				file = fileChooser.showOpenDialog(null);
-
-				if(file == null) return;
-
-				Image imgFile = null;
-
-				try {
-					imgFile = new Image("file:" + file.getParentFile() + "/" +
-					file.getName().substring(0, file.getName().lastIndexOf('.')) + ".png");
-				}
-				catch(Exception err) {
-					System.out.println("Problem with image URI");
-					imgFile = null;
-				}
-
-				imageView.setImage(imgFile);
-
-				pane.getChildren().clear();
-
-				try {
-					Scanner sc = new Scanner(file);
-
-					count = Integer.parseInt(sc.next());
-
-					for(int row = 0; row < 9; row++) {
-						for(int col = 0; col < 9; col++) {
-							grid[row][col] = Integer.parseInt(sc.next());
-						}
-					}
-					sc.close();
-
-					drawGrid(pane);
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-
-		loadData();
-	}
+			newItem.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+					try {
+						file = null;
 	
-	@FXML
-	private void printOutput() 
-	{
-		outputText.setText(inputText.getText());
-	}
-
-	@FXML
-	private void Test() {
-		//System.out.println("test");
+						for(int row = 0; row < 9; row++) {
+							for(int col = 0; col < 9; col++) {
+								grid[row][col] = -1;
+							}
+						}
+	
+						count = 0;
+						drawGrid(pane);
+					}
+					catch(Exception err) {
+						return;
+					}
+				}
+			});
+	
+			countField.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+					try {
+						count = Integer.parseInt(countField.getText());
+						countLabel.setText("Count: " + Integer.toString(count));
+						countField.clear();
+					}
+					catch(Exception err) {
+						return;
+					}
+				}
+			});
+	
+			save.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+					try {
+						FileWriter writer = new FileWriter(file);
+	
+						writer.write(Integer.toString(count) + "\n");
+	
+						for(int row = 0; row < 9; row++) {
+							for(int col = 0; col < 9; col++) {
+								writer.write(Integer.toString(grid[row][col]) + " ");
+							}
+							writer.write("\n");
+						}
+						writer.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+	
+			open.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+					if(file != null) {
+						fileChooser.setInitialDirectory(file.getParentFile());
+					}
+					file = fileChooser.showOpenDialog(null);
+	
+					if(file == null) return;
+	
+					Image imgFile = null;
+	
+					try {
+						imgFile = new Image("file:" + file.getParentFile() + "/" +
+						file.getName().substring(0, file.getName().lastIndexOf('.')) + ".png");
+					}
+					catch(Exception err) {
+						System.out.println("Problem with image URI");
+						imgFile = null;
+					}
+	
+					imageView.setImage(imgFile);
+	
+					pane.getChildren().clear();
+	
+					try {
+						Scanner sc = new Scanner(file);
+	
+						count = Integer.parseInt(sc.next());
+	
+						for(int row = 0; row < 9; row++) {
+							for(int col = 0; col < 9; col++) {
+								grid[row][col] = Integer.parseInt(sc.next());
+							}
+						}
+						sc.close();
+	
+						drawGrid(pane);
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
 	}
 
 	private void loadData() {
@@ -367,10 +370,5 @@ public class TileController
 		list.addAll("Field", "City", "Cloister", "Road", "None" , "Crossing");
 
 		box.getItems().addAll(list);
-	}
-
-	@FXML
-	private void TextChanged() {
-		System.out.println("asd");
 	}
 }
