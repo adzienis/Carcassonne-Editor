@@ -18,6 +18,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -41,6 +43,9 @@ public class TextAreaController
 	private MenuItem open, save, newItem, saveas;
 
 	@FXML
+	private ImageView imageView;
+
+	@FXML
 	private Label countLabel;
 
 	File file = null;
@@ -48,7 +53,7 @@ public class TextAreaController
 	int[][] grid = new int[9][9];
 
 	enum TileType { 
-		Field, Road, City, Cloister, None;
+		Field, Road, City, Cloister, None, Crossing;
 
 		public static int getTileValue(TileType t) {
 			switch(t) {
@@ -60,6 +65,8 @@ public class TextAreaController
 					return 3;
 				case Cloister:
 					return 2;
+				case Crossing:
+					return 4;
 				case None:
 					return -1;
 				default:
@@ -171,6 +178,10 @@ public class TextAreaController
 							case "Road":
 								subRects[temp[1]][temp[0]].setFill(Color.BROWN);
 								grid[temp[1]][temp[0]] = TileType.getTileValue(TileType.Road);
+							break;
+							case "Crossing":
+								subRects[temp[1]][temp[0]].setFill(Color.MAROON);
+								grid[temp[1]][temp[0]] = TileType.getTileValue(TileType.Crossing);
 							break;
 							case "None":
 								subRects[temp[1]][temp[0]].setFill(Color.RED);
@@ -305,6 +316,19 @@ public class TextAreaController
 
 				if(file == null) return;
 
+				Image imgFile = null;
+
+				try {
+					imgFile = new Image("file:" + file.getParentFile() + "/" +
+					file.getName().substring(0, file.getName().lastIndexOf('.')) + ".png");
+				}
+				catch(Exception err) {
+					System.out.println("Problem with image URI");
+					imgFile = null;
+				}
+
+				imageView.setImage(imgFile);
+
 				pane.getChildren().clear();
 
 				try {
@@ -343,7 +367,7 @@ public class TextAreaController
 
 	private void loadData() {
 
-		list.addAll("Field", "City", "Cloister", "Road", "None");
+		list.addAll("Field", "City", "Cloister", "Road", "None" , "Crossing");
 
 		box.getItems().addAll(list);
 	}

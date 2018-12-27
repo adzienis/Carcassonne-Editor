@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.canvas.*?>
 <?import java.lang.*?>
@@ -19,7 +20,6 @@
             <MenuItem fx:id="open" mnemonicParsing="false" text="Open…" />
             <MenuItem fx:id="save" mnemonicParsing="false" text="Save" />
             <MenuItem fx:id="saveas" mnemonicParsing="false" text="Save As…" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
           </items>
         </Menu>
       </menus>
@@ -27,9 +27,10 @@
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="371.0" prefWidth="518.0" VBox.vgrow="ALWAYS">
       <children>
             <ChoiceBox fx:id="box" layoutX="13.0" layoutY="14.0" onContextMenuRequested="#TextChanged" onInputMethodTextChanged="#TextChanged" prefHeight="25.0" prefWidth="98.0" />
-            <Pane fx:id="pane" layoutX="160.0" layoutY="26.0" prefHeight="320.0" prefWidth="320.0" />
-            <TextField fx:id="countField" layoutX="13.0" layoutY="221.0" prefHeight="25.0" prefWidth="98.0" />
-            <Label fx:id="countLabel" layoutX="34.0" layoutY="197.0" text="Count: 0" />
+            <Pane fx:id="pane" layoutX="147.0" layoutY="25.0" prefHeight="320.0" prefWidth="320.0" />
+            <TextField fx:id="countField" layoutX="13.0" layoutY="192.0" prefHeight="25.0" prefWidth="98.0" />
+            <Label fx:id="countLabel" layoutX="34.0" layoutY="168.0" text="Count: 0" />
+            <ImageView fx:id="imageView" fitHeight="89.0" fitWidth="98.0" layoutX="13.0" layoutY="244.0" pickOnBounds="true" preserveRatio="true" />
       </children>
     </AnchorPane>
   </children>
